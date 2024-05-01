@@ -38,7 +38,7 @@ public class MiniGame2 extends JFrame {
 		backgroundMap.setSize(1000, 1000);
 		backgroundMap.setLocation(0, 0);
 
-		jPlayer = new JLabel(icon);
+		jPlayer = new JLabel(icon1);
 		jPlayer_R = new JLabel(icon2);
 		jPlayer.setSize(PLAYER_WIDTH, PLAYER_HEIGHT);
 		jPlayer_R = new JLabel(new ImageIcon("images/playerR.png"));
@@ -76,9 +76,10 @@ public class MiniGame2 extends JFrame {
 					// 변수는 변하는 수이기도 하다.
 					y -= MOVDE_DISTANCE;
 				} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-
+					jPlayer.setIcon(new ImageIcon("images/playerL.png"));
 					x -= MOVDE_DISTANCE;
 				} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+					jPlayer.setIcon(new ImageIcon("images/playerR.png"));
 					x += MOVDE_DISTANCE;
 				} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 					y += MOVDE_DISTANCE;
