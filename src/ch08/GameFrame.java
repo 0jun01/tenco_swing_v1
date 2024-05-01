@@ -1,11 +1,14 @@
 package ch08;
 
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -28,6 +31,7 @@ public class GameFrame extends JFrame {
 		initData();
 		setInitLayout();
 		addEventListener();
+
 	}
 
 	// 클래스 안에 클래스 -> 중첩 클래스 -> 외부클래스, 내부클래스
@@ -79,8 +83,15 @@ public class GameFrame extends JFrame {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				if (x <= (enemyX + 40) && x >= (enemyX - 40)) {
+					if (y <= (enemyY + 50) && y >= (enemyY - 50)) {
+
+						x = -650;
+					}
+				}
 				repaint();
 			}
+
 		}
 	}
 
@@ -92,7 +103,7 @@ public class GameFrame extends JFrame {
 			// 예외가 발생할 수 있는 코드를 작성하는 영역이다.
 			backgroundImage = ImageIO.read(new File("img/backgroundMap.png"));
 			player1 = ImageIO.read(new File("img/playerL.png"));
-			enemy1 = ImageIO.read(new File("img/enemyL.png"));
+			enemy1 = ImageIO.read(new File("img/image4.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -154,10 +165,8 @@ public class GameFrame extends JFrame {
 				}
 
 				// 2. player가 적군과 만났다면 player 그림을 없애주세요
-				if ((x == enemyX && y == enemyY) || (x == (enemyX + 10) && y == (enemyY + 10))
-						|| (x == (enemyX - 10) && y == (enemyY - 10))) {
-					x -= 650;
-				}
+				
+
 				repaint();
 				// 제어문
 			}
