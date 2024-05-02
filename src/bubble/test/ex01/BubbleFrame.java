@@ -1,4 +1,4 @@
-package bubble.test;
+package bubble.test.ex01;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -53,7 +53,6 @@ public class BubbleFrame extends JFrame {
 					// 구현
 					// Player 객체를 생성했기 때문에 바로 호출 할 수 있다.
 					player.left();
-
 					break;
 				case KeyEvent.VK_RIGHT:
 					player.right();
@@ -63,9 +62,21 @@ public class BubbleFrame extends JFrame {
 					break;
 				}
 			} // end of KeyPressed
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_LEFT:
+					player.setLeft(false);
+					break;
+				case KeyEvent.VK_RIGHT:
+					player.setRight(false);
+					break;
+				}
+			} // end of KeyReleased
 		});
 	}
-	
+
 	// 코드 테스트
 	public static void main(String[] args) {
 		new BubbleFrame();

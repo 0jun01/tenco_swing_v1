@@ -1,4 +1,4 @@
-package bubble.test;
+package bubble.test.ex03;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -17,10 +17,16 @@ public class BubbleFrame extends JFrame {
 		initData();
 		setInitLayout();
 		addEventListener();
+
+		// Player 백그라운드 서버스 시작
+
+		new Thread(new BackgroundPlayerService(player)).start();
 	}
 
 	private void initData() {
-		backgroundMap = new JLabel(new ImageIcon("img/backgroundMap.png"));
+		// TODO 이미지 변경
+		backgroundMap = new JLabel(new ImageIcon("img/backgroundMapService.png"));
+		// backgroundMap = new JLabel(new ImageIcon("img/test.png"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Frame --> root Panel이 있다
 		setContentPane(backgroundMap); // add 처리
@@ -53,7 +59,6 @@ public class BubbleFrame extends JFrame {
 					// 구현
 					// Player 객체를 생성했기 때문에 바로 호출 할 수 있다.
 					player.left();
-
 					break;
 				case KeyEvent.VK_RIGHT:
 					player.right();
@@ -63,9 +68,21 @@ public class BubbleFrame extends JFrame {
 					break;
 				}
 			} // end of KeyPressed
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_LEFT:
+					player.setLeft(false);
+					break;
+				case KeyEvent.VK_RIGHT:
+					player.setRight(false);
+					break;
+				}
+			} // end of KeyReleased
 		});
 	}
-	
+
 	// 코드 테스트
 	public static void main(String[] args) {
 		new BubbleFrame();

@@ -7,7 +7,7 @@ public class Player extends JLabel implements Moveable {
 
 	private int x;
 	private int y;
-	private ImageIcon playerR, playerL,enemyL,enemyR;
+	private ImageIcon playerR, playerL;
 
 	public Player() {
 		initData();
@@ -17,8 +17,6 @@ public class Player extends JLabel implements Moveable {
 	private void initData() {
 		playerR = new ImageIcon("img/playerR.png");
 		playerL = new ImageIcon("img/playerL.png");
-		enemyR = new ImageIcon("img/enemyR.png");
-		enemyL = new ImageIcon("img/enemyL.png");
 
 		// 처음 실행 시 초기 값 셋팅
 		x = 55;
@@ -52,12 +50,12 @@ public class Player extends JLabel implements Moveable {
 	public void up() {
 		y -= 10;
 		setLocation(x, y);
-
+		System.out.println("점프");
 	}
 
 	@Override
 	public void down() {
-
+		System.out.println("다운");
 	}
 
 }
