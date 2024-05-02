@@ -1,17 +1,16 @@
-package bubble.test.ex03;
+package bubble.test.ex04;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-
-import lombok.Data;
-import lombok.Getter;
-
 
 public class Player extends JLabel implements Moveable {
 
 	private int x;
 	private int y;
 	private ImageIcon playerR, playerL;
+	int jumpCount = 1;
+	int currentX = 0;
+	int currentY = 0;
 
 	// 움직임의 상태
 	private boolean left;
@@ -19,22 +18,106 @@ public class Player extends JLabel implements Moveable {
 	private boolean up;
 	private boolean down;
 
+	// 벽에 충돌한 상태
+	private boolean leftWallCrash;
+	private boolean rightWallCrash;
+
 	// 플레이어 속도 상태
 	private final int SPEED = 4;
 	private final int JUMPSPEED = 2;
 
-	// setter
+	// get,set
+	public Player() {
+		initData();
+		setInitLayout();
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public ImageIcon getPlayerR() {
+		return playerR;
+	}
+
+	public void setPlayerR(ImageIcon playerR) {
+		this.playerR = playerR;
+	}
+
+	public ImageIcon getPlayerL() {
+		return playerL;
+	}
+
+	public void setPlayerL(ImageIcon playerL) {
+		this.playerL = playerL;
+	}
+
+	public boolean isLeft() {
+		return left;
+	}
+
 	public void setLeft(boolean left) {
 		this.left = left;
+	}
+
+	public boolean isRight() {
+		return right;
 	}
 
 	public void setRight(boolean right) {
 		this.right = right;
 	}
 
-	public Player() {
-		initData();
-		setInitLayout();
+	public boolean isUp() {
+		return up;
+	}
+
+	public void setUp(boolean up) {
+		this.up = up;
+	}
+
+	public boolean isDown() {
+		return down;
+	}
+
+	public void setDown(boolean down) {
+		this.down = down;
+	}
+
+	public boolean isLeftWallCrash() {
+		return leftWallCrash;
+	}
+
+	public void setLeftWallCrash(boolean leftWallCrash) {
+		this.leftWallCrash = leftWallCrash;
+	}
+
+	public boolean isRightWallCrash() {
+		return rightWallCrash;
+	}
+
+	public void setRightWallCrash(boolean rightWallCrash) {
+		this.rightWallCrash = rightWallCrash;
+	}
+
+	public int getSPEED() {
+		return SPEED;
+	}
+
+	public int getJUMPSPEED() {
+		return JUMPSPEED;
 	}
 
 	private void initData() {
@@ -51,18 +134,21 @@ public class Player extends JLabel implements Moveable {
 		up = false;
 		down = false;
 
-		setIcon(playerR);
-		setSize(50, 50);
-		setLocation(x, y);
+		leftWallCrash = false;
+		rightWallCrash = false;
 	}
 
 	private void setInitLayout() {
+		setIcon(playerR);
+		setSize(50, 50);
+		setLocation(x, y);
 	}
 
 	@Override
 	public void left() {
 		left = true;
 		setIcon(playerL);
+
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -83,6 +169,7 @@ public class Player extends JLabel implements Moveable {
 	public void right() {
 		right = true;
 		setIcon(playerR);
+
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -101,12 +188,13 @@ public class Player extends JLabel implements Moveable {
 
 	@Override
 	public void up() {
+		currentX = x;
+		currentY = y;
 		System.out.println("점프");
 		up = true;
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-
 				for (int i = 0; i < 130 / JUMPSPEED; i++) {
 					y = y - JUMPSPEED;
 					setLocation(x, y);
@@ -116,7 +204,6 @@ public class Player extends JLabel implements Moveable {
 						e.printStackTrace();
 					}
 				}
-
 				// 객체의 상태값을 잘 조절해야 한다.
 				up = false;
 				down();
@@ -128,6 +215,7 @@ public class Player extends JLabel implements Moveable {
 
 	@Override
 	public void down() {
+
 		System.out.println("다운");
 		down = true;
 		new Thread(new Runnable() {
