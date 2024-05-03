@@ -1,12 +1,9 @@
-package bubble.test;
+package bubble.test.ex01;
 
 public interface Moveable {
 
-<<<<<<< HEAD
-=======
 	void left();
 	void right();
 	void up();
 	void down();
->>>>>>> f-bubble
 }
