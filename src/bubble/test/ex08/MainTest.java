@@ -1,4 +1,4 @@
-package bubble.test;
+package bubble.test.ex08;
 
 public class MainTest {
 
