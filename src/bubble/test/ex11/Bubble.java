@@ -1,15 +1,18 @@
-package bubble.test.ex08;
+package bubble.test.ex11;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class Bubble extends JLabel implements Moveable {
 
+	// 의존성 컴포지션 관계
 	private Player player;
-	private Enemy enemy;
+	private BackgroundBubbleService backgroundBubbleService;
+	private BubbleFrame mContext;
+
 	private int x;
 	private int y;
-	private int hitX = 50;
+
 	// 움직임 상태
 	private boolean left;
 	private boolean right;
@@ -23,15 +26,13 @@ public class Bubble extends JLabel implements Moveable {
 	private ImageIcon bomb; // 물방울 팡!
 
 	// 연관관계, 의존성 컴포지션 관계, 생성자 의존 (DI)
-	public Bubble(Player player) {
-		this.player = player;
+	public Bubble(BubbleFrame mContext) {
+		this.mContext = mContext;
+		this.player = mContext.getPlayer();
 		initData();
 		setInitLayout();
 
-		// 객체 생성시 무조건 스레드 시작
-		initThread();
 	}
-
 
 	// get,set
 	public Player getPlayer() {
@@ -119,6 +120,7 @@ public class Bubble extends JLabel implements Moveable {
 		bubble = new ImageIcon("img/bubble.png");
 		bubbled = new ImageIcon("img/bubbled.png");
 		bomb = new ImageIcon("img/bomb.png");
+		backgroundBubbleService = new BackgroundBubbleService(this);
 
 		left = false;
 		right = false;
@@ -137,37 +139,38 @@ public class Bubble extends JLabel implements Moveable {
 		setLocation(x, y);
 	}
 
-	// 공통으로 사용하는 부분을 메서드로 만들어 보자.
-	// 이 메서드는 내부에서만 사용할 예정
-	private void initThread() {
-		// 버블을 스레드가 하나면 된다.
-		// 익명 클래스,
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-
-				if (player.playerWay == PlayerWay.LEFT) {
-					left();
-				} else {
-					right();
-				}
-			}
-		}).start();
-
-	}
-
 	@Override
 	public void left() {
 		left = true;
-		for (int i = 0; i < 200; i++) {
-			if (x == 50) {
-				up();
-				setIcon(bubbled);
-			}
-
+		for (int i = 0; i < 400; i++) {
 			x--;
 			setLocation(x, y);
+
+			// 만약 왼쪽벽에 부딪혔다면 up()
+			if (backgroundBubbleService.leftWall()) {
+				// 부딪힘
+				break;
+			}
+
+			// 현재 버블에 x,y 좌표값을 알고 있다.
+			//
+			System.out.println("적군 x 좌표 위치 : " + mContext.getEnemey().getX());
+			System.out.println("적군 y 좌표 위치 : " + mContext.getEnemey().getY());
+			// x 절댓값만 확인해 보자
+
+			int absX = Math.abs(x - mContext.getEnemey().getX());
+			System.out.println("absX : " + absX);
+			int absY = Math.abs(y - mContext.getEnemey().getY());
+			System.out.println("absY : " + absY);
+
+			if (absX < 10 && absY < 50) {
+				crash();
+				// 단. 적군이 살아 있을 때 crash() 메서드 호출이 되어야 함.
+				if (mContext.getEnemey().getState() == 0) {
+					crash();
+				}
+			}
+
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
@@ -179,12 +182,25 @@ public class Bubble extends JLabel implements Moveable {
 
 	@Override
 	public void right() {
-		for (int i = 0; i < 200; i++) {
-			if (x == 900) {
-				up();
-			}
+		right = true;
+		for (int i = 0; i < 400; i++) {
 			x++;
 			setLocation(x, y);
+			if (backgroundBubbleService.rightWall()) {
+				break;
+			}
+
+			// 적군 감지 충돌 처리
+			int absX = Math.abs(x - mContext.getEnemey().getX());
+			int absY = Math.abs(y - mContext.getEnemey().getY());
+
+			if (absX < 10 && absY < 50) {
+				crash();
+				if (mContext.getEnemey().getState() == 0) {
+					crash();
+				}
+			}
+
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
@@ -198,34 +214,47 @@ public class Bubble extends JLabel implements Moveable {
 	@Override
 	public void up() {
 		up = true;
-		while (up) {
-			if (y == 25) {
-				up = false;
-
-			} else {
-				y--;
-
-				setLocation(x, y);
-				try {
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				if (y == 25) {
-					try {
-						Thread.sleep(1500);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					setIcon(bomb);
-					try {
-						Thread.sleep(800);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					setIcon(null);
-				}
+		while (true) {
+			y--;
+			setLocation(x, y);
+			if (backgroundBubbleService.topWall()) {
+				break;
+			}
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
+		clearBubble();
 	}
+
+	// 외부 호출 안될 메서드
+	private void clearBubble() {
+		// 3초뒤에 터짐
+		try {
+			Thread.sleep(3000);
+			setIcon(bomb);
+			// TODO 테스트 필요 !!
+			Thread.sleep(500);
+			setIcon(null);
+
+			remove(mContext);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void crash() {
+		mContext.getEnemey().setState(1);
+		state = 1;
+		setIcon(bubbled);
+		mContext.getEnemey().setIcon(null); // 가비지 콜렉터의 제거 대상이 된다.
+		up();
+		// 적군이 살아 있는 상태에서
+		// 버블에 갇힌 상태로 변경
+
+		// 버블의 이미지를 변경 처리
+	}
+
 }

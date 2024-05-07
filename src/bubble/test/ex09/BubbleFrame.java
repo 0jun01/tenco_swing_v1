@@ -1,4 +1,4 @@
-package bubble.test.ex08;
+package bubble.test.ex09;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -12,7 +12,6 @@ public class BubbleFrame extends JFrame {
 	private JLabel backgroundMap;
 	// 포함관계 - 콤포지션
 	private Player player;
-	private Enemy enemy;
 	int jumpCount = 1;
 	private boolean space;
 
@@ -46,7 +45,6 @@ public class BubbleFrame extends JFrame {
 		setLocationRelativeTo(null); // JFrame 여러분 모니터 가운데 자동 배치
 		setVisible(true);
 		add(player);
-		add(enemy);
 	}
 
 	private void addEventListener() {

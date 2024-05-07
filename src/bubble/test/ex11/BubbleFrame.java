@@ -1,4 +1,4 @@
-package bubble.test.ex08;
+package bubble.test.ex11;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -9,12 +9,12 @@ import javax.swing.JLabel;
 
 public class BubbleFrame extends JFrame {
 
+	// 컨텍스트를 생성하는 방법 ( 셀프참조 )
+	BubbleFrame mContext = this;
 	private JLabel backgroundMap;
 	// 포함관계 - 콤포지션
 	private Player player;
-	private Enemy enemy;
-	int jumpCount = 1;
-	private boolean space;
+	private Enemy enemy1;
 
 	public BubbleFrame() {
 
@@ -22,8 +22,7 @@ public class BubbleFrame extends JFrame {
 		setInitLayout();
 		addEventListener();
 
-		// Player 백그라운드 서비스 시작
-		new Thread(new BackgroundPlayerService(player)).start();
+		
 	}
 
 	private void initData() {
@@ -35,7 +34,10 @@ public class BubbleFrame extends JFrame {
 		setContentPane(backgroundMap); // add 처리
 		setSize(1000, 640);
 
-		player = new Player();
+		// mContext --> 참조 타입( ) -- > 주소값에 크기는 기본 4byte 이다.
+		player = new Player(mContext);
+
+		enemy1 = new Enemy(mContext);
 
 	}
 
@@ -46,7 +48,7 @@ public class BubbleFrame extends JFrame {
 		setLocationRelativeTo(null); // JFrame 여러분 모니터 가운데 자동 배치
 		setVisible(true);
 		add(player);
-		add(enemy);
+		add(enemy1);
 	}
 
 	private void addEventListener() {
@@ -77,8 +79,11 @@ public class BubbleFrame extends JFrame {
 					player.up();
 					break;
 				case KeyEvent.VK_SPACE:
-					Bubble bubble = new Bubble(player);
-					add(new Bubble(player));
+					// Bubble bubble = new Bubble(player);
+					// add(new Bubble(player));
+					// 프레임에 컴포넌트를 add 동작은 누구 ? JFrame --> add() 메서드 이다.
+					// 버블 실행시에 끊김 현상이 발생하는 이유는 왜 일까??
+					player.attack();
 					break;
 				default:
 					break;
@@ -104,8 +109,20 @@ public class BubbleFrame extends JFrame {
 		});
 	}
 
+	// getter
+	public Player getPlayer() {
+		return player;
+	}
+
+	public Enemy getEnemey() {
+		return enemy1;
+	}
+
 	// 코드 테스트
 	public static void main(String[] args) {
+		// main 함수를 가지고 있는 클래스는 하위에 생성된 모든 객체들에
+		// 주소값을 알고 있다. ( 중요! 중요! 중요!)
+
 		new BubbleFrame();
 	} // end of main
 

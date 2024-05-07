@@ -19,76 +19,61 @@ public class Enemy extends JLabel {
 		setInitLayout();
 	}
 
-
 	public int getX() {
 		return x;
 	}
-
 
 	public void setX(int x) {
 		this.x = x;
 	}
 
-
 	public int getY() {
 		return y;
 	}
-
 
 	public void setY(int y) {
 		this.y = y;
 	}
 
-
 	public Player getPlayer() {
 		return player;
 	}
-
 
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
 
-
 	public Bubble getBubble() {
 		return bubble;
 	}
-
 
 	public void setBubble(Bubble bubble) {
 		this.bubble = bubble;
 	}
 
-
 	public ImageIcon getEnemyL() {
 		return enemyL;
 	}
-
 
 	public void setEnemyL(ImageIcon enemyL) {
 		this.enemyL = enemyL;
 	}
 
-
 	public ImageIcon getEnemyR() {
 		return enemyR;
 	}
-
 
 	public void setEnemyR(ImageIcon enemyR) {
 		this.enemyR = enemyR;
 	}
 
-
 	public ImageIcon getBubbled() {
 		return bubbled;
 	}
 
-
 	public void setBubbled(ImageIcon bubbled) {
 		this.bubbled = bubbled;
 	}
-
 
 	public void initData() {
 		x = 550;

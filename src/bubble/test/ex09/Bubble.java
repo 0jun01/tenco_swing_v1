@@ -1,15 +1,17 @@
-package bubble.test.ex08;
+package bubble.test.ex09;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class Bubble extends JLabel implements Moveable {
 
+	// 의존성 컴포지션 관계
 	private Player player;
-	private Enemy enemy;
+	private BackgroundBubbleService backgroundBubbleService;
+
 	private int x;
 	private int y;
-	private int hitX = 50;
+
 	// 움직임 상태
 	private boolean left;
 	private boolean right;
@@ -31,7 +33,6 @@ public class Bubble extends JLabel implements Moveable {
 		// 객체 생성시 무조건 스레드 시작
 		initThread();
 	}
-
 
 	// get,set
 	public Player getPlayer() {
@@ -119,6 +120,7 @@ public class Bubble extends JLabel implements Moveable {
 		bubble = new ImageIcon("img/bubble.png");
 		bubbled = new ImageIcon("img/bubbled.png");
 		bomb = new ImageIcon("img/bomb.png");
+		backgroundBubbleService = new BackgroundBubbleService(this);
 
 		left = false;
 		right = false;
@@ -160,14 +162,16 @@ public class Bubble extends JLabel implements Moveable {
 	@Override
 	public void left() {
 		left = true;
-		for (int i = 0; i < 200; i++) {
-			if (x == 50) {
-				up();
-				setIcon(bubbled);
-			}
-
+		for (int i = 0; i < 400; i++) {
 			x--;
 			setLocation(x, y);
+
+			// 만약 왼쪽벽에 부딪혔다면 up()
+			if (backgroundBubbleService.leftWall()) {
+				// 부딪힘
+				break;
+			}
+
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
@@ -179,12 +183,13 @@ public class Bubble extends JLabel implements Moveable {
 
 	@Override
 	public void right() {
-		for (int i = 0; i < 200; i++) {
-			if (x == 900) {
-				up();
-			}
+		right = true;
+		for (int i = 0; i < 400; i++) {
 			x++;
 			setLocation(x, y);
+			if (backgroundBubbleService.rightWall()) {
+				break;
+			}
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
@@ -198,34 +203,18 @@ public class Bubble extends JLabel implements Moveable {
 	@Override
 	public void up() {
 		up = true;
-		while (up) {
-			if (y == 25) {
-				up = false;
-
-			} else {
-				y--;
-
-				setLocation(x, y);
-				try {
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				if (y == 25) {
-					try {
-						Thread.sleep(1500);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					setIcon(bomb);
-					try {
-						Thread.sleep(800);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					setIcon(null);
-				}
+		while (true) {
+			y--;
+			setLocation(x, y);
+			if (backgroundBubbleService.topWall()) {
+				break;
+			}
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 	}
+
 }
