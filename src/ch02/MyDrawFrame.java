@@ -42,6 +42,8 @@ public class MyDrawFrame extends JFrame {
 
 	class MyDrawPanel extends JPanel {
 
+		
+		
 		// paints ---> x
 		// print ---> x
 		// paint ---> o

@@ -8,6 +8,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.net.MalformedURLException;
 
 import javax.swing.ImageIcon;
@@ -59,6 +61,7 @@ public class ColorChangeFrame3 extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object object = e.getSource();
 		JButton selectedButton = (JButton) e.getSource();
+		
 		if (selectedButton == this.button1) {
 			panel.setBackground(Color.yellow);
 		} else if (selectedButton == this.button2) {
@@ -74,6 +77,7 @@ public class ColorChangeFrame3 extends JFrame implements ActionListener {
 		button2.addActionListener(this);
 		button3.addActionListener(this);
 		button4.addActionListener(this);
+
 	}
 
 	public static void main(String[] args) {

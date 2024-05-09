@@ -1,6 +1,5 @@
 package CrazyArcade;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -9,6 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,12 +18,14 @@ public class MainFrame extends JFrame {
 	MainFrame mContext = this;
 	private JLabel backgroundMap;
 	private Player1 player1;
+	private Bush bush;
 	private Player1KeyListener player1KeyListener;
 	private int[][] Map;
+	private JButton[] button;
 	Color MapColor;
 
 	private BufferedImage mapImage;
-	private String mapAdress = "IMG/main_background.png";
+	private String mapAdress = "IMG/background_test4_1010.png";
 
 	private final int PIXEL_COLOR_WHITE = 0;
 	private final int PIXEL_COLOR_RED = 1;
@@ -48,7 +50,12 @@ public class MainFrame extends JFrame {
 		mapArrayAdd();
 		// setContentPane(backgroundMap);
 		backgroundMap = new JLabel(icon);
+		JPanel jpanel = new JPanel();
+		jpanel.add(backgroundMap);
+		
 		player1 = new Player1(mContext);
+
+		bush = new Bush(mContext);
 		backgroundMap.setSize(1000, 1000);
 		backgroundMap.setLocation(0, 0);
 	}
@@ -56,6 +63,7 @@ public class MainFrame extends JFrame {
 	private void setInitLayout() {
 		setLayout(null);
 		add(backgroundMap);
+		backgroundMap.add(bush);
 		backgroundMap.add(player1);
 		// setResizable(false);
 		setLocationRelativeTo(null);// jframe 모니터 가운데 자동 배치
@@ -84,8 +92,6 @@ public class MainFrame extends JFrame {
 				Map[i][j] = getColor(50 + 100 * j, 50 + 100 * i);
 				if (Map[i][j] == 1) {
 					add(new Box(mContext, i, j));
-				} else if (Map[i][j] == 2) {
-					System.out.println("Blue");
 				}
 				System.out.print("[" + Map[i][j] + "]");
 			}
@@ -96,7 +102,7 @@ public class MainFrame extends JFrame {
 
 	public int getColor(int x, int y) {
 		MapColor = new Color(mapImage.getRGB(x, y));
-
+		// MapColor = new Color(backgroundMap.getColorModel());
 		if (MapColor.getRed() == 255 && MapColor.getGreen() == 0 && MapColor.getBlue() == 0) {
 
 			return PIXEL_COLOR_RED;// 빨강
@@ -105,6 +111,14 @@ public class MainFrame extends JFrame {
 		} else {
 			return PIXEL_COLOR_WHITE;// 흰색
 		}
+	}
+
+	public Player1 getPlayer1() {
+		return player1;
+	}
+
+	public Bush getBush() {
+		return bush;
 	}
 
 	public static void main(String[] args) {

@@ -171,6 +171,10 @@ public class Player1 extends JLabel implements Moveable {
 
 	}
 
+	public void hideOnBush() {
+
+	}
+
 	@Override
 	public void left() {
 		playerWay = PlayerWay.LEFT;
@@ -187,9 +191,10 @@ public class Player1 extends JLabel implements Moveable {
 					try {
 						Thread.sleep(SLEEPTIME);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					mContext.getBush().hideOnBush();
+					repaint();
 				}
 
 			}
@@ -200,7 +205,6 @@ public class Player1 extends JLabel implements Moveable {
 	public void right() {
 		playerWay = PlayerWay.RIGHT;
 		right = true;
-		setIcon(playerR);
 		new Thread(new Runnable() {
 
 			@Override
@@ -208,12 +212,14 @@ public class Player1 extends JLabel implements Moveable {
 				while (right) {
 					x += SPEED;
 					setLocation(x, y);
+					setIcon(playerR);
 					try {
 						Thread.sleep(SLEEPTIME);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					mContext.getBush().hideOnBush();
+					repaint();
 				}
 
 			}
@@ -234,9 +240,10 @@ public class Player1 extends JLabel implements Moveable {
 					try {
 						Thread.sleep(SLEEPTIME);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					mContext.getBush().hideOnBush();
+					repaint();
 				}
 				blueWallCrash = false;
 			}
@@ -257,10 +264,10 @@ public class Player1 extends JLabel implements Moveable {
 					try {
 						Thread.sleep(SLEEPTIME);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-
+					mContext.getBush().hideOnBush();
+					repaint();
 				}
 				blueWallCrash = false;
 
