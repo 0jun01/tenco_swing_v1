@@ -52,7 +52,6 @@ public class MainFrame extends JFrame {
 		backgroundMap = new JLabel(icon);
 		JPanel jpanel = new JPanel();
 		jpanel.add(backgroundMap);
-		
 		player1 = new Player1(mContext);
 
 		bush = new Bush(mContext);
