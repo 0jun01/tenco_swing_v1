@@ -32,7 +32,7 @@ public class MainTest2 extends JFrame {
 		setSize(1000, 1100);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		panelCenter = new JPanel();
-//		setResizable(false);
+//		setResizable(false); 
 //		panelNorth = new JPanel(); // Flow Layout 
 //		panelNorth.setBackground(Color.YELLOW);
 //		panelSouth = new JPanel();
