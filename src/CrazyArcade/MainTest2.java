@@ -17,7 +17,7 @@ public class MainTest2 extends JFrame {
 //	private JPanel panelSouth;
 //	JPanel panelNorth;
 	private JButton button;
-
+	int b =0;
 	private JPanel panelCenter;
 	private ArrayList<JPanel> arrayListJpanels = new ArrayList<JPanel>(100);
 
@@ -92,6 +92,37 @@ public class MainTest2 extends JFrame {
 //				panelCenter.add(new CreatePanel(j, i, this));
 //			}
 //		}
+		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				while(true) {
+					b++;
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (b == 7) {
+					System.out.println("asdf");
+					int c = 0;
+					for (int i = 0; i < 10; i++) {
+						for (int j = 0; j < 10; j++) {
+							// System.out.println("i : " + i);
+							arrayListJpanels.get(c).setVisible(false);
+							c++;
+							
+						}
+					}
+				}
+				}
+				
+				
+			}
+		}).start();
 
 	}
 
